@@ -57,7 +57,7 @@ func (obj *Slave) WebSettings(w http.ResponseWriter, r *http.Request) {
 	}
 	if action == "setspeed" {
 		speed, _ := strconv.Atoi(r.FormValue("speed"))
-		if speed != obj.Config.MouseSpeed && speed > 0 && speed <= 20 {
+		if speed != obj.Config.MouseSpeed && speed > 0 && speed <= 60 {
 			obj.Config.UpdateMouseSpeed(speed)
 		}
 		w.Header().Set("Content-Type", "application/json")

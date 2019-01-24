@@ -119,17 +119,20 @@ func (obj *Slave) Run() {
 					case evdev.KEY_LEFTCTRL, evdev.KEY_LEFTSHIFT, evdev.KEY_LEFTALT, evdev.KEY_LEFTMETA,
 						evdev.KEY_RIGHTCTRL, evdev.KEY_RIGHTSHIFT, evdev.KEY_RIGHTALT, evdev.KEY_RIGHTMETA:
 						{
-							if scancode, ok := MODMAP[e.Code]; ok {
-								if e.Value == 0 && obj.NeedReleaseGUI && (scancode == KEY_LEFTCTRL || scancode == KEY_LEFTALT) {
-									obj.keyboardReport.OnMod(KEY_LEFTMETA, 0)
-									obj.NeedReleaseGUI = false
-								}
-								if b := obj.keyboardReport.OnMod(scancode, e.Value); b != nil {
-									obj.keyboard.Write(b)
-								}
-							} else {
-								logrus.Info("not found mod ", e.Code)
-							}
+							// if scancode, ok := MODMAP[e.Code]; ok {
+							// 	obj.keyboardReport.OnMod(KEY_LEFTMETA, 0)
+							// }
+							// if scancode, ok := MODMAP[e.Code]; ok {
+							// 	if e.Value == 0 && obj.NeedReleaseGUI && (scancode == KEY_LEFTCTRL || scancode == KEY_LEFTALT) {
+							// 		obj.keyboardReport.OnMod(KEY_LEFTMETA, 0)
+							// 		obj.NeedReleaseGUI = false
+							// 	}
+							// 	if b := obj.keyboardReport.OnMod(scancode, e.Value); b != nil {
+							// 		obj.keyboard.Write(b)
+							// 	}
+							// } else {
+							// 	logrus.Info("not found mod ", e.Code)
+							// }
 							break
 						}
 					case evdev.BTN_LEFT, evdev.BTN_RIGHT, evdev.BTN_MIDDLE,
@@ -148,7 +151,6 @@ func (obj *Slave) Run() {
 							//if e.Code==evdev.KEY_HOME
 
 							if scancode, ok := HIDMAP[e.Code]; ok {
-
 								if e.Value == 1 { // press key
 									if obj.keyboardReport.ModStatus(KEY_LEFTCTRL) && scancode != KEY_SPACE {
 										obj.keyboardReport.OnMod(KEY_LEFTCTRL, 0)

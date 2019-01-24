@@ -24,9 +24,13 @@ func (obj *Slave) WebWin(w http.ResponseWriter, r *http.Request) {
 		if centerX == 0 || centerY == 0 {
 			return
 		}
-		for n := int32(1); n <= 5; n++ {
+		for n := int32(1); n <= 4; n++ {
 			for i := 0; i < 4; i++ {
+				moved := int32(0)
+				movedSteps := []string{}
 				for j := int32(n); j <= n*10; j += n {
+					moved += j
+					movedSteps = append(movedSteps, strconv.Itoa(int(j)))
 					switch i {
 					case 0:
 						if b := obj.mouseReport.OnMove(evdev.REL_X, j); b != nil {
@@ -62,6 +66,8 @@ func (obj *Slave) WebWin(w http.ResponseWriter, r *http.Request) {
 
 					time.Sleep(10 * time.Millisecond)
 				}
+
+				logrus.Infof("Win Move to %d -> %s = %d", i, strings.Join(movedSteps, "+"), moved)
 
 			}
 			time.Sleep(1000 * time.Millisecond)
@@ -130,13 +136,19 @@ var content_win = []byte(`
 
 <head>
   <meta charset="UTF-8">
-  <title>WINDOWS</title>
+  <title>WINDOWS Mouse</title>
   <link rel="stylesheet" href="/style.css">
   <script src="/jquery.js"></script>
 </head>
 
 <body>
+
   <div class="box">
+      <ul>
+          <li><a href="/">Settings</a></li>
+          <li><a href="/win" class="active">Win Mouse</a></li>
+          <li><a href="/nonwin">Non-Win Mouse</a></li>
+        </ul>
     <div id="content" class="row content"></div>
   </div>
   </div>
@@ -181,10 +193,6 @@ var content_win = []byte(`
         LastPoint.X = x;
         LastPoint.Y = y;
       }
-
-
-
-
     };
 
     canvas.onmouseout = function (event) { if (Step == "zero") { Step = ""; alert("failed,click the panel to retry.") } }
@@ -262,9 +270,9 @@ var content_win = []byte(`
         if (xOffset != 0 || yOffset != 0) {
           console.log("zero: ", CurrentPoint.X, "," + CurrentPoint.Y + " -> " + centerX + "," + centerY)
           if (xOffset != 0)
-            $.get("/?hid=M:X:" + (xOffset < 0 ? -1 : 1), function (data) { });
+            $.get("/win?hid=M:X:" + (xOffset < 0 ? -1 : 1), function (data) { });
           if (yOffset != 0)
-            $.get("/?hid=M:Y:" + (yOffset < 0 ? -1 : 1), function (data) { });
+            $.get("/win?hid=M:Y:" + (yOffset < 0 ? -1 : 1), function (data) { });
         } else {
           Step = "draw";
           clearInterval(MoveTimer);
@@ -272,7 +280,7 @@ var content_win = []byte(`
           LastPoint.Y = centerY;
           drawPoint(centerX, centerY, "black")
           setTimeout(function () {
-            $.get("/?draw=1&centerx=" + centerX + "&centery=" + centerY, function (data) { });
+            $.get("/win?draw=1&centerx=" + centerX + "&centery=" + centerY, function (data) { });
           }, 1000);
 
         }

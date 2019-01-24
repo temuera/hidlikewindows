@@ -25,7 +25,7 @@ func (obj *Slave) WebNonWin(w http.ResponseWriter, r *http.Request) {
 		if centerX == 0 || centerY == 0 {
 			return
 		}
-		for n := int32(1); n <= 5; n++ {
+		for n := int32(1); n <= 4; n++ {
 			for i := 0; i < 4; i++ {
 				for j := int32(n); j <= n*10; j += n {
 					e := &evdev.InputEvent{Type: evdev.EV_REL}
@@ -105,22 +105,27 @@ func (obj *Slave) WebNonWin(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	//write from file
-	w.Write(content_mac)
+	w.Write(content_nonwin)
 }
 
-var content_mac = []byte(`
+var content_nonwin = []byte(`
 <!doctype html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <title>NON-WINDOWS</title>
+  <title>NON-WINDOWS Mouse</title>
   <link rel="stylesheet" href="/style.css">
   <script src="/jquery.js"></script>
 </head>
 
 <body>
   <div class="box">
+      <ul>
+          <li><a href="/">Settings</a></li>
+          <li><a href="/win">Win Mouse</a></li>
+          <li><a href="/nonwin" class="active">Non-Win Mouse</a></li>
+        </ul>
     <div id="content" class="row content"></div>
   </div>
   </div>
@@ -169,19 +174,10 @@ var content_mac = []byte(`
         LastPoint.Y = y;
 
       }
-
-
-
-
     };
-
     canvas.onmousemove = function (event) {
       CurrentPoint = { X: event.pageX - canvas.offsetLeft, Y: event.pageY - canvas.offsetTop };
     }
-
-
-
-
     function drawPoint(x, y, color) {
       ctx.beginPath();
       ctx.rect(x, y, 2, 2);
@@ -248,15 +244,15 @@ var content_mac = []byte(`
         if (xOffset != 0 || yOffset != 0) {
           console.log("zero: ", CurrentPoint.X, "," + CurrentPoint.Y + " -> " + centerX + "," + centerY)
           if (xOffset != 0)
-            $.get("/?hid=M:X:" + (xOffset < 0 ? -1 : 1), function (data) { });
+            $.get("/nonwin?hid=M:X:" + (xOffset < 0 ? -1 : 1), function (data) { });
           if (yOffset != 0)
-            $.get("/?hid=M:Y:" + (yOffset < 0 ? -1 : 1), function (data) { });
+            $.get("/nonwin?hid=M:Y:" + (yOffset < 0 ? -1 : 1), function (data) { });
         } else {
           Step = "draw";
           clearInterval(MoveTimer);
           LastPoint.X = centerX;
           LastPoint.Y = centerY;
-          $.get("/?draw=1&centerx=" + centerX + "&centery=" + centerY, function (data) { });
+          $.get("/nonwin?draw=1&centerx=" + centerX + "&centery=" + centerY, function (data) { });
         }
       }
     }

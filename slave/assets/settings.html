@@ -17,24 +17,24 @@
     </ul>
     <div id="content" class="row content">
       <div style="margin: 20px 40px; background: #fff;padding:10px;min-height: 500px">
-        <h1 class="center">🖯</h1>
+        <h1 class="center">🖱️</h1>
         <div class="center">
           Slow
-          <input type="radio" name="speed" value="1" {{if eq .MouseSpeed 1}} checked {{end}} />
-          <input type="radio" name="speed" value="2" {{if eq .MouseSpeed 2}} checked {{end}} />
-          <input type="radio" name="speed" value="4" {{if eq .MouseSpeed 4}} checked {{end}} />
-          <input type="radio" name="speed" value="6" {{if eq .MouseSpeed 6}} checked {{end}} />
-          <input type="radio" name="speed" value="8" {{if eq .MouseSpeed 8}} checked {{end}} />
           <input type="radio" name="speed" value="10" {{if eq .MouseSpeed 10}} checked {{end}} />
           <input type="radio" name="speed" value="12" {{if eq .MouseSpeed 12}} checked {{end}} />
           <input type="radio" name="speed" value="14" {{if eq .MouseSpeed 14}} checked {{end}} />
           <input type="radio" name="speed" value="16" {{if eq .MouseSpeed 16}} checked {{end}} />
           <input type="radio" name="speed" value="18" {{if eq .MouseSpeed 18}} checked {{end}} />
           <input type="radio" name="speed" value="20" {{if eq .MouseSpeed 20}} checked {{end}} />
+          <input type="radio" name="speed" value="22" {{if eq .MouseSpeed 22}} checked {{end}} />
+          <input type="radio" name="speed" value="24" {{if eq .MouseSpeed 24}} checked {{end}} />
+          <input type="radio" name="speed" value="26" {{if eq .MouseSpeed 26}} checked {{end}} />
+          <input type="radio" name="speed" value="28" {{if eq .MouseSpeed 28}} checked {{end}} />
+          <input type="radio" name="speed" value="30" {{if eq .MouseSpeed 30}} checked {{end}} />
           Fast
         </div>
 
-        <h1 class="center">🖮</h1>
+        <h1 class="center">⌨️</h1>
         <table class="table" style="margin:0 auto;">
           <tr>
             <th class="left">Input</th>
@@ -64,6 +64,10 @@
 
   <div style='display:none'>
     <div id='keyeditor' style='padding:10px; background:#fff;'>
+
+ 
+
+
       <form id="frmEditor">
         <div>
           <input type="checkbox" id="KEY_LEFTCTRL" name="modkey" value="1"><label for="KEY_LEFTCTRL">L.CTRL</label>
@@ -263,6 +267,19 @@
       <label id="errMsg" style="color:red"></label>
     </div>
   </div>
+
+
+  <script>
+      var charfield = document.getElementById("btnSave");
+      charfield.onkeypress = function (e) {
+        e = e || window.event;
+        var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+        if (charCode > 0) {
+          alert("Typed character: " + String.fromCharCode(charCode));
+        }
+      };
+    </script>
+
 
   <script>
     $(document).ready(function () {
