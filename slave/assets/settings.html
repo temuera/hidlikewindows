@@ -16,25 +16,44 @@
       <li><a href="/nonwin">Non-Win Mouse</a></li>
     </ul>
     <div id="content" class="row content">
-      <div style="margin: 20px 40px; background: #fff;padding:10px;min-height: 500px">
-        <h1 class="center">🖱️</h1>
-        <div class="center">
-          Slow
-          <input type="radio" name="speed" value="10" {{if eq .MouseSpeed 10}} checked {{end}} />
-          <input type="radio" name="speed" value="12" {{if eq .MouseSpeed 12}} checked {{end}} />
-          <input type="radio" name="speed" value="14" {{if eq .MouseSpeed 14}} checked {{end}} />
-          <input type="radio" name="speed" value="16" {{if eq .MouseSpeed 16}} checked {{end}} />
-          <input type="radio" name="speed" value="18" {{if eq .MouseSpeed 18}} checked {{end}} />
-          <input type="radio" name="speed" value="20" {{if eq .MouseSpeed 20}} checked {{end}} />
-          <input type="radio" name="speed" value="22" {{if eq .MouseSpeed 22}} checked {{end}} />
-          <input type="radio" name="speed" value="24" {{if eq .MouseSpeed 24}} checked {{end}} />
-          <input type="radio" name="speed" value="26" {{if eq .MouseSpeed 26}} checked {{end}} />
-          <input type="radio" name="speed" value="28" {{if eq .MouseSpeed 28}} checked {{end}} />
-          <input type="radio" name="speed" value="30" {{if eq .MouseSpeed 30}} checked {{end}} />
-          Fast
+      <div style="margin: 20px 40px; background: #fff;padding:10px 50px;min-height: 500px">
+        <h1 class="left">🖱️ Mouse Settings</h1>
+        <div class="left">
+          <ul class="f">
+            <li class="l ">
+              Mouse Speed
+            </li>
+            <li class="r">
+                <input type="radio" name="mousespeed" value="10" {{if eq .MouseSpeed 10}} checked {{end}} />
+                <input type="radio" name="mousespeed" value="12" {{if eq .MouseSpeed 12}} checked {{end}} />
+                <input type="radio" name="mousespeed" value="14" {{if eq .MouseSpeed 14}} checked {{end}} />
+                <input type="radio" name="mousespeed" value="16" {{if eq .MouseSpeed 16}} checked {{end}} />
+                <input type="radio" name="mousespeed" value="18" {{if eq .MouseSpeed 18}} checked {{end}} />
+                <input type="radio" name="mousespeed" value="20" {{if eq .MouseSpeed 20}} checked {{end}} />
+                <input type="radio" name="mousespeed" value="22" {{if eq .MouseSpeed 22}} checked {{end}} />
+                <input type="radio" name="mousespeed" value="24" {{if eq .MouseSpeed 24}} checked {{end}} />
+                <input type="radio" name="mousespeed" value="26" {{if eq .MouseSpeed 26}} checked {{end}} />
+                <input type="radio" name="mousespeed" value="28" {{if eq .MouseSpeed 28}} checked {{end}} />
+                <input type="radio" name="mousespeed" value="30" {{if eq .MouseSpeed 30}} checked {{end}} />
+            </li>
+            <li class="l ">
+                Scroll Speed
+            </li>
+            <li class="r">
+                <input type="radio" name="scrollspeed" value="1" {{if eq .ScrollSpeed 1}} checked {{end}} />
+                <input type="radio" name="scrollspeed" value="2" {{if eq .ScrollSpeed 2}} checked {{end}} />
+                <input type="radio" name="scrollspeed" value="3" {{if eq .ScrollSpeed 3}} checked {{end}} />
+                <input type="radio" name="scrollspeed" value="4" {{if eq .ScrollSpeed 4}} checked {{end}} />
+                <input type="radio" name="scrollspeed" value="5" {{if eq .ScrollSpeed 5}} checked {{end}} />
+                <input type="radio" name="scrollspeed" value="6" {{if eq .ScrollSpeed 6}} checked {{end}} />
+              </li>
+          </ul>
         </div>
 
-        <h1 class="center">⌨️</h1>
+
+        
+        <h1 class="left">⌨️ Keyboard Settings</h1>
+
         <table class="table" style="margin:0 auto;">
           <tr>
             <th class="left">Input</th>
@@ -284,12 +303,16 @@
   <script>
     $(document).ready(function () {
 
-      $('input[type=radio][name=speed]').change(function () {
-        $.get("/?action=setspeed&speed=" + $(this).val(), function (r) {
+      $('input[type=radio][name=mousespeed]').change(function () {
+        $.get("/?action=setmousespeed&speed=" + $(this).val(), function (r) {
           console.debug(r);
         });
       });
-
+      $('input[type=radio][name=scrollspeed]').change(function () {
+        $.get("/?action=setscrollspeed&speed=" + $(this).val(), function (r) {
+          console.debug(r);
+        });
+      });
 
 
       $(".inline").colorbox({ inline: true, width: "50%" });

@@ -121,7 +121,6 @@ table.table th {
 .table {
     background-color: #fff;
     color: #363636;
-    max-width: 800px;
     width:100%;
     border-collapse: collapse;
     border-spacing: 0;
@@ -129,7 +128,25 @@ table.table th {
 tr:hover{
     background-color:#efefef;
 }
+hr{
+    border:1px solid #ccc;
+}
 
+ul.f{
+	width:100%;
+	margin-bottom:20px;
+	overflow:hidden;
+    border-top:1px solid #ccc;
+    background:#fff;
+}
+.f li{
+	line-height:1.5em;
+	border-bottom:1px solid #ccc;
+	float:left;
+	display:inline;
+}
+.f li.l	{ width:10%;}
+.f li.r	{ width:90%;}
 
 /*
     Colorbox Core Style:

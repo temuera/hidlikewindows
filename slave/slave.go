@@ -205,9 +205,13 @@ func (obj *Slave) Run() {
 							}
 						}
 					} else if e.Code == evdev.REL_WHEEL {
-						if b := obj.mouseReport.OnWheel(e.Value); b != nil {
-							obj.mouse.Write(b)
+						//e.Value = e.Value * 6
+						for index := 0; index < obj.Config.ScrollSpeed; index++ {
+							if b := obj.mouseReport.OnWheel(e.Value); b != nil {
+								obj.mouse.Write(b)
+							}
 						}
+						//logrus.Info(e.Code, "\t", e.Value)
 					}
 
 				}

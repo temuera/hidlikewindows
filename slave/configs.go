@@ -59,8 +59,9 @@ func (obj KeyMap) OutputString() string {
 }
 
 type HLWConfig struct {
-	MouseSpeed int               `json:"mousespeed"`
-	KeyMaps    map[string]KeyMap `json:"keymaps"`
+	MouseSpeed  int               `json:"mousespeed"`
+	ScrollSpeed int               `json:scrollspeed`
+	KeyMaps     map[string]KeyMap `json:"keymaps"`
 }
 
 var lock sync.Mutex
@@ -79,7 +80,7 @@ var Unmarshal = func(r io.Reader, v interface{}) error {
 }
 
 func LoadHLWConfig() (cfg *HLWConfig, err error) {
-	cfg = &HLWConfig{MouseSpeed: 10, KeyMaps: make(map[string]KeyMap)}
+	cfg = &HLWConfig{MouseSpeed: 20, ScrollSpeed: 3, KeyMaps: make(map[string]KeyMap)}
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		cfg.Save()
 	}
@@ -111,6 +112,10 @@ func (obj *HLWConfig) Save() error {
 
 func (obj *HLWConfig) UpdateMouseSpeed(newSpeed int) {
 	obj.MouseSpeed = newSpeed
+	obj.Save()
+}
+func (obj *HLWConfig) UpdateScrollSpeed(newSpeed int) {
+	obj.ScrollSpeed = newSpeed
 	obj.Save()
 }
 func (obj *HLWConfig) InsertKeyMap(km KeyMap) (err error) {
