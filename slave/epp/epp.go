@@ -63,17 +63,14 @@ func smoothMouseGain(deviceSpeed float64, segment *int) float64 {
 	return slope + intercept/deviceSpeed
 }
 
-func Apply(mouseSensitivity float64, mouseRawX, mouseRawY int) (mouseX, mouseY int) {
-	//mouseSensitivity = 20
-	var screenResolutionFactor float64 = 96 / 150.0 //150是win7之后固定的
+func Apply(eppFactor float64, mouseRawX, mouseRawY int) (mouseX, mouseY int) {
 	mouseMag := float64(math.Max(math.Abs(float64(mouseRawX)), math.Abs(float64(mouseRawY))) +
 		math.Min(math.Abs(float64(mouseRawX)), math.Abs(float64(mouseRawY)))/2.0)
 	var currentSegmentIndex int = FINDSEGMENT
-	pixelGain = screenResolutionFactor * (mouseSensitivity / 16.0) * smoothMouseGain(mouseMag/3.5, &currentSegmentIndex) / 3.5
+	pixelGain = eppFactor * smoothMouseGain(mouseMag/3.5, &currentSegmentIndex) / 3.5
 
 	if currentSegmentIndex > previousSegmentIndex {
-		// Average with calculation using previous curve segment
-		pixelGainUsingPreviousSegment := screenResolutionFactor * (mouseSensitivity / 16.0) * smoothMouseGain(mouseMag/3.5, &previousSegmentIndex) / 3.5
+		pixelGainUsingPreviousSegment := eppFactor * smoothMouseGain(mouseMag/3.5, &previousSegmentIndex) / 3.5
 		pixelGain = (pixelGain + pixelGainUsingPreviousSegment) / 2.0
 	}
 	previousSegmentIndex = currentSegmentIndex

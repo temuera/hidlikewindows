@@ -116,6 +116,18 @@ func (obj *Slave) Run() {
 			{
 				if e.Type == evdev.EV_KEY {
 					switch e.Code {
+					//mouse button
+					case evdev.BTN_LEFT, evdev.BTN_RIGHT, evdev.BTN_MIDDLE,
+						evdev.BTN_SIDE, evdev.BTN_EXTRA, evdev.BTN_FORWARD, evdev.BTN_BACK:
+						{
+							if scancode, ok := MOUSEMAP[e.Code]; ok {
+								if b := obj.mouseReport.OnButton(scancode, e.Value); b != nil {
+									obj.mouse.Write(b)
+								}
+							}
+							break
+						}
+
 					case evdev.KEY_LEFTCTRL, evdev.KEY_LEFTSHIFT, evdev.KEY_LEFTALT, evdev.KEY_LEFTMETA,
 						evdev.KEY_RIGHTCTRL, evdev.KEY_RIGHTSHIFT, evdev.KEY_RIGHTALT, evdev.KEY_RIGHTMETA:
 						{
@@ -135,16 +147,7 @@ func (obj *Slave) Run() {
 							// }
 							break
 						}
-					case evdev.BTN_LEFT, evdev.BTN_RIGHT, evdev.BTN_MIDDLE,
-						evdev.BTN_SIDE, evdev.BTN_EXTRA, evdev.BTN_FORWARD, evdev.BTN_BACK:
-						{
-							if scancode, ok := MOUSEMAP[e.Code]; ok {
-								if b := obj.mouseReport.OnButton(scancode, e.Value); b != nil {
-									obj.mouse.Write(b)
-								}
-							}
-							break
-						}
+
 					default:
 						{
 
@@ -189,29 +192,25 @@ func (obj *Slave) Run() {
 				} else if e.Type == evdev.EV_REL {
 					//mouse move ,scroll
 					if e.Code == evdev.REL_X || e.Code == evdev.REL_Y {
-						//x,y:=0,0
 						if e.Code == evdev.REL_X {
-							v, _ := epp.Apply(float64(obj.Config.MouseSpeed), int(e.Value), 0)
+							v, _ := epp.Apply(obj.Config.EPPFactor, int(e.Value), 0)
 							e.Value = int32(v)
 
 						} else if e.Code == evdev.REL_Y {
-							_, v := epp.Apply(float64(obj.Config.MouseSpeed), 0, int(e.Value))
+							_, v := epp.Apply(obj.Config.EPPFactor, 0, int(e.Value))
 							e.Value = int32(v)
 						}
-
 						if b := obj.mouseReport.OnMove(e.Code, e.Value); b != nil {
 							if e := obj.mouse.Write(b); e != nil {
 								logrus.Error("write to mouse hid: ", e)
 							}
 						}
 					} else if e.Code == evdev.REL_WHEEL {
-						//e.Value = e.Value * 6
 						for index := 0; index < obj.Config.ScrollSpeed; index++ {
 							if b := obj.mouseReport.OnWheel(e.Value); b != nil {
 								obj.mouse.Write(b)
 							}
 						}
-						//logrus.Info(e.Code, "\t", e.Value)
 					}
 
 				}

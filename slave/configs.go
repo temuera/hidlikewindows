@@ -60,8 +60,11 @@ func (obj KeyMap) OutputString() string {
 
 type HLWConfig struct {
 	MouseSpeed  int               `json:"mousespeed"`
-	ScrollSpeed int               `json:scrollspeed`
+	ScrollSpeed int               `json:"scrollspeed"`
 	KeyMaps     map[string]KeyMap `json:"keymaps"`
+	MouseMaps   map[string]KeyMap `json:"mousemaps"`
+
+	EPPFactor float64 `json:"-"`
 }
 
 var lock sync.Mutex
@@ -92,11 +95,15 @@ func LoadHLWConfig() (cfg *HLWConfig, err error) {
 	}
 	defer f.Close()
 	err = Unmarshal(f, cfg)
+	if err == nil {
+		cfg.EPPFactor = (96 / 150.0) * (float64(cfg.MouseSpeed) / 16.0)
+	}
 	return cfg, err
 }
 func (obj *HLWConfig) Save() error {
-	lock.Lock()
-	defer lock.Unlock()
+
+	obj.EPPFactor = (96 / 150.0) * (float64(obj.MouseSpeed) / 16.0)
+
 	f, err := os.Create(configPath)
 	if err != nil {
 		return err
@@ -111,15 +118,20 @@ func (obj *HLWConfig) Save() error {
 }
 
 func (obj *HLWConfig) UpdateMouseSpeed(newSpeed int) {
+	lock.Lock()
+	defer lock.Unlock()
 	obj.MouseSpeed = newSpeed
 	obj.Save()
 }
 func (obj *HLWConfig) UpdateScrollSpeed(newSpeed int) {
+	lock.Lock()
+	defer lock.Unlock()
 	obj.ScrollSpeed = newSpeed
 	obj.Save()
 }
 func (obj *HLWConfig) InsertKeyMap(km KeyMap) (err error) {
-
+	lock.Lock()
+	defer lock.Unlock()
 	km.Id = fmt.Sprintf("%x", md5.Sum([]byte(km.InputString())))
 	if _, ok := obj.KeyMaps[km.Id]; ok {
 		err = errors.New("Key existed")
@@ -129,8 +141,29 @@ func (obj *HLWConfig) InsertKeyMap(km KeyMap) (err error) {
 	obj.Save()
 	return nil
 }
-
 func (obj *HLWConfig) RemoveKeyMap(id string) {
+	lock.Lock()
+	defer lock.Unlock()
 	delete(obj.KeyMaps, id)
+	obj.Save()
+}
+
+func (obj *HLWConfig) InsertMouseMap(km KeyMap) (err error) {
+	lock.Lock()
+	defer lock.Unlock()
+
+	km.Id = fmt.Sprintf("%x", md5.Sum([]byte(km.InputString())))
+	if _, ok := obj.MouseMaps[km.Id]; ok {
+		err = errors.New("Key existed")
+		return
+	}
+	obj.KeyMaps[km.Id] = km
+	obj.Save()
+	return nil
+}
+func (obj *HLWConfig) RemoveMouseMap(id string) {
+	lock.Lock()
+	defer lock.Unlock()
+	delete(obj.MouseMaps, id)
 	obj.Save()
 }

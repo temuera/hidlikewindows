@@ -39,9 +39,6 @@ func (obj *MouseReport) OnButton(scancode byte, value int32) []byte {
 func (obj *MouseReport) OnMove(evcode uint16, value int32) []byte {
 
 	obj.Store[1], obj.Store[2], obj.Store[3], obj.Store[4], obj.Store[5] = 0, 0, 0, 0, 0
-
-	//value = int32(float32(value) / 1.75)
-
 	if evcode == evdev.REL_X {
 		obj.Store[1] = byte(value)
 		obj.Store[2] = byte(value >> 8)
@@ -49,9 +46,6 @@ func (obj *MouseReport) OnMove(evcode uint16, value int32) []byte {
 		obj.Store[3] = byte(value)
 		obj.Store[4] = byte(value >> 8)
 	}
-	//if Debug {
-	//logrus.Info(obj)
-	//}
 	return obj.Store
 }
 

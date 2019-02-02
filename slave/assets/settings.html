@@ -24,54 +24,71 @@
               Mouse Speed
             </li>
             <li class="r">
-                <input type="radio" name="mousespeed" value="10" {{if eq .MouseSpeed 10}} checked {{end}} />
-                <input type="radio" name="mousespeed" value="12" {{if eq .MouseSpeed 12}} checked {{end}} />
-                <input type="radio" name="mousespeed" value="14" {{if eq .MouseSpeed 14}} checked {{end}} />
-                <input type="radio" name="mousespeed" value="16" {{if eq .MouseSpeed 16}} checked {{end}} />
-                <input type="radio" name="mousespeed" value="18" {{if eq .MouseSpeed 18}} checked {{end}} />
-                <input type="radio" name="mousespeed" value="20" {{if eq .MouseSpeed 20}} checked {{end}} />
-                <input type="radio" name="mousespeed" value="22" {{if eq .MouseSpeed 22}} checked {{end}} />
-                <input type="radio" name="mousespeed" value="24" {{if eq .MouseSpeed 24}} checked {{end}} />
-                <input type="radio" name="mousespeed" value="26" {{if eq .MouseSpeed 26}} checked {{end}} />
-                <input type="radio" name="mousespeed" value="28" {{if eq .MouseSpeed 28}} checked {{end}} />
-                <input type="radio" name="mousespeed" value="30" {{if eq .MouseSpeed 30}} checked {{end}} />
+              <input type="radio" name="mousespeed" value="10" {{if eq .MouseSpeed 10}} checked {{end}} />
+              <input type="radio" name="mousespeed" value="12" {{if eq .MouseSpeed 12}} checked {{end}} />
+              <input type="radio" name="mousespeed" value="14" {{if eq .MouseSpeed 14}} checked {{end}} />
+              <input type="radio" name="mousespeed" value="16" {{if eq .MouseSpeed 16}} checked {{end}} />
+              <input type="radio" name="mousespeed" value="18" {{if eq .MouseSpeed 18}} checked {{end}} />
+              <input type="radio" name="mousespeed" value="20" {{if eq .MouseSpeed 20}} checked {{end}} />
+              <input type="radio" name="mousespeed" value="22" {{if eq .MouseSpeed 22}} checked {{end}} />
+              <input type="radio" name="mousespeed" value="24" {{if eq .MouseSpeed 24}} checked {{end}} />
+              <input type="radio" name="mousespeed" value="26" {{if eq .MouseSpeed 26}} checked {{end}} />
+              <input type="radio" name="mousespeed" value="28" {{if eq .MouseSpeed 28}} checked {{end}} />
+              <input type="radio" name="mousespeed" value="30" {{if eq .MouseSpeed 30}} checked {{end}} />
             </li>
             <li class="l ">
-                Scroll Speed
+              Scroll Speed
             </li>
             <li class="r">
-                <input type="radio" name="scrollspeed" value="1" {{if eq .ScrollSpeed 1}} checked {{end}} />
-                <input type="radio" name="scrollspeed" value="2" {{if eq .ScrollSpeed 2}} checked {{end}} />
-                <input type="radio" name="scrollspeed" value="3" {{if eq .ScrollSpeed 3}} checked {{end}} />
-                <input type="radio" name="scrollspeed" value="4" {{if eq .ScrollSpeed 4}} checked {{end}} />
-                <input type="radio" name="scrollspeed" value="5" {{if eq .ScrollSpeed 5}} checked {{end}} />
-                <input type="radio" name="scrollspeed" value="6" {{if eq .ScrollSpeed 6}} checked {{end}} />
-              </li>
+              <input type="radio" name="scrollspeed" value="1" {{if eq .ScrollSpeed 1}} checked {{end}} />
+              <input type="radio" name="scrollspeed" value="2" {{if eq .ScrollSpeed 2}} checked {{end}} />
+              <input type="radio" name="scrollspeed" value="3" {{if eq .ScrollSpeed 3}} checked {{end}} />
+              <input type="radio" name="scrollspeed" value="4" {{if eq .ScrollSpeed 4}} checked {{end}} />
+              <input type="radio" name="scrollspeed" value="5" {{if eq .ScrollSpeed 5}} checked {{end}} />
+              <input type="radio" name="scrollspeed" value="6" {{if eq .ScrollSpeed 6}} checked {{end}} />
+            </li>
           </ul>
+          <table class="table" style="margin:0 auto;">
+            <tr>
+              <th style="width:20px"></th>
+              <th class="left" style="width:30%">Button</th>
+              <th class="left">Output</th>
+            </tr>
+            <tr>
+              <td colspan="3" class="left"><a class='inline btn' href="#mousekeyeditor">+</a></td>
+            </tr>
+            {{ range $key, $km := .MouseMaps }}
+            <tr id="{{$key}}">
+              <td><button class="btnRemove" objid="{{$key}}">-</button></td>
+              <td>{{$km.InputString}}</td>
+              <td>{{$km.OutputString}}</td>
+
+            </tr>
+            {{ end }}
+          </table>
         </div>
 
 
-        
+
         <h1 class="left">⌨️ Keyboard Settings</h1>
 
         <table class="table" style="margin:0 auto;">
           <tr>
-            <th class="left">Input</th>
-            <th class="left">Output</th>
             <th style="width:20px"></th>
+            <th class="left" style="width:30%">Keyboard</th>
+            <th class="left">Output</th>
           </tr>
           <tr>
-            <td colspan="3" class="right"><button class='inline' href="#keyeditor">+</button></td>
+            <td colspan="3" class="left"><a class='inline btn' href="#keyeditor">+</a></td>
           </tr>
-
           {{ range $key, $km := .KeyMaps }}
           <tr id="{{$key}}">
+            <td><a href="javascript:void(0)" class="btnRemoveKeyboard btn" objid="{{$key}}">-</a></td>
             <td>{{$km.InputString}}</td>
             <td>{{$km.OutputString}}</td>
-            <td><button class="btnRemove" objid="{{$key}}">-</button></td>
+
           </tr>
           {{ end }}
-
         </table>
 
       </div>
@@ -84,7 +101,7 @@
   <div style='display:none'>
     <div id='keyeditor' style='padding:10px; background:#fff;'>
 
- 
+
 
 
       <form id="frmEditor">
@@ -289,15 +306,15 @@
 
 
   <script>
-      var charfield = document.getElementById("btnSave");
-      charfield.onkeypress = function (e) {
-        e = e || window.event;
-        var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
-        if (charCode > 0) {
-          alert("Typed character: " + String.fromCharCode(charCode));
-        }
-      };
-    </script>
+    var charfield = document.getElementById("btnSave");
+    charfield.onkeypress = function (e) {
+      e = e || window.event;
+      var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+      if (charCode > 0) {
+        alert("Typed character: " + String.fromCharCode(charCode));
+      }
+    };
+  </script>
 
 
   <script>

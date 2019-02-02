@@ -125,11 +125,15 @@ table.table th {
     border-collapse: collapse;
     border-spacing: 0;
 }
-tr:hover{
-    background-color:#efefef;
+tr:not(:first-child):hover{
+    background-color:#f1f1f1;
 }
 hr{
     border:1px solid #ccc;
+}
+
+.btn{
+    text-align:center;display:block;width:16px;text-decoration: none;border: 1px solid #ccc;
 }
 
 ul.f{
