@@ -84,6 +84,9 @@ func (obj *KeyboardReport) OnMod(scancode byte, value int32) []byte {
 	return obj.buff
 
 }
-func (obj *KeyboardReport) ModStatus(scancode byte) bool {
+func (obj *KeyboardReport) CheckModStatus(scancode byte) bool {
 	return obj.buff[0]&byte(scancode) == scancode
+}
+func (obj *KeyboardReport) GetModStatus() byte {
+	return obj.buff[0]
 }

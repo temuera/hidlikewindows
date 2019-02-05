@@ -97,7 +97,7 @@ func (obj *Slave) WebNonWin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "text/html")
-	filename := "assets/nonwin.html"
+	filename := CurrentDir() + "assets/nonwin.html"
 	if _, err := os.Stat(filename); !os.IsNotExist(err) {
 		if b, e := ioutil.ReadFile(filename); e == nil {
 			w.Write(b)

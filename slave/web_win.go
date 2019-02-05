@@ -119,7 +119,7 @@ func (obj *Slave) WebWin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "text/html")
-	filename := "assets/win.html"
+	filename := CurrentDir() + "assets/win.html"
 	if _, err := os.Stat(filename); !os.IsNotExist(err) {
 		if b, e := ioutil.ReadFile(filename); e == nil {
 			w.Write(b)

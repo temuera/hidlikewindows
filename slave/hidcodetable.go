@@ -153,27 +153,45 @@ var HIDNAME map[int]string
 var HIDMAP map[uint16]byte
 
 var MODNAME map[int]string
+
+var MOUSENAME map[int]string
+
 var MODMAP map[uint16]byte
 var MOUSEMAP map[uint16]byte
 
 func init() {
 	MOUSEMAP = make(map[uint16]byte)
-	/*	BTN_LEFT                     = 0x110
-		BTN_RIGHT                    = 0x111
-		BTN_MIDDLE                   = 0x112
-		BTN_SIDE                     = 0x113
-		BTN_EXTRA                    = 0x114
-		BTN_FORWARD                  = 0x115
-		BTN_BACK                     = 0x116
-		BTN_TASK                     = 0x117*/
+	/*	BTN_LEFT                     = 0x110	272
+		BTN_RIGHT                    = 0x111	273
+		BTN_MIDDLE                   = 0x112	274
+		BTN_SIDE                     = 0x113	275
+		BTN_EXTRA                    = 0x114	276
+		BTN_FORWARD                  = 0x115	277
+		BTN_BACK                     = 0x116	278
+		BTN_TASK                     = 0x117	279
+
+	*/
 	MOUSEMAP[272] = 0x01
 	MOUSEMAP[273] = 0x02
 	MOUSEMAP[274] = 0x04
+
 	MOUSEMAP[275] = 0x08
 	MOUSEMAP[276] = 0x10
+
 	MOUSEMAP[277] = 0x20
 	MOUSEMAP[278] = 0x40
+
 	MOUSEMAP[279] = 0x80
+
+	MOUSENAME = make(map[int]string)
+	MOUSENAME[1] = "M.LEFT"
+	MOUSENAME[2] = "M.RIGHT"
+	MOUSENAME[4] = "M.MIDDLE"
+	MOUSENAME[8] = "M.SIDE"
+	MOUSENAME[16] = "M.EXTRA"
+	MOUSENAME[32] = "M.FORWARD"
+	MOUSENAME[64] = "M.BACK"
+	MOUSENAME[128] = "M.TASK"
 
 	MODMAP = make(map[uint16]byte)
 	MODMAP[29] = KEY_LEFTCTRL

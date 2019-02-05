@@ -121,6 +121,9 @@ func (obj *Slave) Run() {
 						evdev.BTN_SIDE, evdev.BTN_EXTRA, evdev.BTN_FORWARD, evdev.BTN_BACK:
 						{
 							if scancode, ok := MOUSEMAP[e.Code]; ok {
+								if obj.ProcessMouseMap(scancode, e.Value) {
+									break
+								}
 								if b := obj.mouseReport.OnButton(scancode, e.Value); b != nil {
 									obj.mouse.Write(b)
 								}
@@ -131,6 +134,11 @@ func (obj *Slave) Run() {
 					case evdev.KEY_LEFTCTRL, evdev.KEY_LEFTSHIFT, evdev.KEY_LEFTALT, evdev.KEY_LEFTMETA,
 						evdev.KEY_RIGHTCTRL, evdev.KEY_RIGHTSHIFT, evdev.KEY_RIGHTALT, evdev.KEY_RIGHTMETA:
 						{
+							if scancode, ok := MODMAP[e.Code]; ok {
+								if b := obj.keyboardReport.OnMod(scancode, e.Value); b != nil {
+									obj.keyboard.Write(b)
+								}
+							}
 							// if scancode, ok := MODMAP[e.Code]; ok {
 							// 	obj.keyboardReport.OnMod(KEY_LEFTMETA, 0)
 							// }
@@ -151,38 +159,44 @@ func (obj *Slave) Run() {
 					default:
 						{
 
-							//if e.Code==evdev.KEY_HOME
-
 							if scancode, ok := HIDMAP[e.Code]; ok {
-								if e.Value == 1 { // press key
-									if obj.keyboardReport.ModStatus(KEY_LEFTCTRL) && scancode != KEY_SPACE {
-										obj.keyboardReport.OnMod(KEY_LEFTCTRL, 0)
-										obj.keyboardReport.OnMod(KEY_LEFTMETA, 1)
-										obj.NeedReleaseGUI = true
-									}
-									if obj.keyboardReport.ModStatus(KEY_LEFTALT) && scancode == KEY_TAB {
-										obj.keyboardReport.OnMod(KEY_LEFTALT, 0)
-										obj.keyboardReport.OnMod(KEY_LEFTMETA, 1)
-										obj.NeedReleaseGUI = true
-									}
+								if obj.ProcessKeyboardMap(scancode, e.Value) {
+									break
 								}
 
-								if !obj.NeedReleaseGUI && (scancode == KEY_HOME) { //one key press
-
-									obj.keyboardReport.OnMod(KEY_LEFTMETA, e.Value)
-									if b := obj.keyboardReport.OnKey(KEY_LEFT, e.Value); b != nil {
-										obj.keyboard.Write(b)
-									}
-									break
-								} else if !obj.NeedReleaseGUI && (scancode == KEY_END) {
-									obj.keyboardReport.OnMod(KEY_LEFTMETA, e.Value)
-									if b := obj.keyboardReport.OnKey(KEY_RIGHT, e.Value); b != nil {
-										obj.keyboard.Write(b)
-									}
-									break
-								} else if b := obj.keyboardReport.OnKey(scancode, e.Value); b != nil {
+								if b := obj.keyboardReport.OnKey(scancode, e.Value); b != nil {
 									obj.keyboard.Write(b)
 								}
+
+								// if e.Value == 1 { // press key
+								// 	if obj.keyboardReport.ModStatus(KEY_LEFTCTRL) && scancode != KEY_SPACE {
+								// 		obj.keyboardReport.OnMod(KEY_LEFTCTRL, 0)
+								// 		obj.keyboardReport.OnMod(KEY_LEFTMETA, 1)
+								// 		obj.NeedReleaseGUI = true
+								// 	}
+								// 	if obj.keyboardReport.ModStatus(KEY_LEFTALT) && scancode == KEY_TAB {
+								// 		obj.keyboardReport.OnMod(KEY_LEFTALT, 0)
+								// 		obj.keyboardReport.OnMod(KEY_LEFTMETA, 1)
+								// 		obj.NeedReleaseGUI = true
+								// 	}
+								// }
+
+								// if !obj.NeedReleaseGUI && (scancode == KEY_HOME) { //one key press
+
+								// 	obj.keyboardReport.OnMod(KEY_LEFTMETA, e.Value)
+								// 	if b := obj.keyboardReport.OnKey(KEY_LEFT, e.Value); b != nil {
+								// 		obj.keyboard.Write(b)
+								// 	}
+								// 	break
+								// } else if !obj.NeedReleaseGUI && (scancode == KEY_END) {
+								// 	obj.keyboardReport.OnMod(KEY_LEFTMETA, e.Value)
+								// 	if b := obj.keyboardReport.OnKey(KEY_RIGHT, e.Value); b != nil {
+								// 		obj.keyboard.Write(b)
+								// 	}
+								// 	break
+								// } else if b := obj.keyboardReport.OnKey(scancode, e.Value); b != nil {
+								// 	obj.keyboard.Write(b)
+								// }
 
 							}
 							break
