@@ -1,6 +1,16 @@
 # hidlikewindows
 use pi zero make mac/linux mouse keyboard like windows
 
+
+![settings](https://github.com/dazhoudotnet/hidlikewindows/blob/master/settings.png?raw=true)
+
+![keyboard remap](https://github.com/dazhoudotnet/hidlikewindows/blob/master/keyboard_remap.png?raw=true)
+
+![mouse button remap](https://github.com/dazhoudotnet/hidlikewindows/blob/master/mouse_remap.png?raw=true)
+
+![mouse speed test](https://github.com/dazhoudotnet/hidlikewindows/blob/master/mousespeedtest.png?raw=true)
+
+
  **Host PI Zero Config**
 
 `config.txt`
